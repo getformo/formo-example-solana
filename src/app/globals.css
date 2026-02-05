@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 14, 14, 16;
+  --background-end-rgb: 24, 24, 27;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  min-height: 100vh;
+}
+
+/* Solana wallet adapter UI overrides */
+.wallet-adapter-button {
+  background: linear-gradient(135deg, #9945FF 0%, #14F195 100%) !important;
+}
+
+.wallet-adapter-button:hover {
+  background: linear-gradient(135deg, #8833EE 0%, #12E088 100%) !important;
+}
+
+.wallet-adapter-modal-wrapper {
+  background-color: rgba(14, 14, 16, 0.95) !important;
+}
+
+.wallet-adapter-modal-container {
+  background-color: #1a1a1e !important;
+}
