@@ -5,12 +5,14 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { Transaction, SystemProgram, Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useNetworkConfiguration } from "@/contexts/NetworkConfigurationProvider";
 import { toast } from "sonner";
 import { Loader2, Layers } from "lucide-react";
 
 export const SignAllTransactions: FC = () => {
   const { connection } = useConnection();
   const { publicKey, signAllTransactions, sendTransaction } = useWallet();
+  const { networkConfiguration } = useNetworkConfiguration();
   const [isLoading, setIsLoading] = useState(false);
 
   const onClick = useCallback(async () => {
@@ -75,7 +77,7 @@ export const SignAllTransactions: FC = () => {
         action: {
           label: "View First",
           onClick: () => window.open(
-            `https://explorer.solana.com/tx/${signatures[0]}?cluster=devnet`,
+            `https://explorer.solana.com/tx/${signatures[0]}?cluster=${networkConfiguration}`,
             "_blank"
           ),
         },
@@ -95,7 +97,7 @@ export const SignAllTransactions: FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [publicKey, connection, signAllTransactions, sendTransaction]);
+  }, [publicKey, connection, signAllTransactions, sendTransaction, networkConfiguration]);
 
   return (
     <Card>
