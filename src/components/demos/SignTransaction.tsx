@@ -48,9 +48,9 @@ export const SignTransaction: FC = () => {
       const signedTx = await signTransaction(transaction);
 
       // Get the signature from the signed transaction
-      const signature = signedTx.signatures[0];
-      if (signature) {
-        setSignedTxSignature(bs58.encode(signature.signature!));
+      const signaturePair = signedTx.signatures[0];
+      if (signaturePair?.signature) {
+        setSignedTxSignature(bs58.encode(signaturePair.signature));
       }
 
       toast.success("Transaction Signed!", {

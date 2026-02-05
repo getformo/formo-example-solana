@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useState,
+  useRef,
   ReactNode,
 } from "react";
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
@@ -36,6 +37,14 @@ export function FormoProvider({ children }: { children: ReactNode }) {
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Use ref to hold the current wallet to avoid re-init on every wallet state change
+  const walletRef = useRef(wallet);
+  walletRef.current = wallet;
+
+  // Only re-initialize when connection or network actually changes
+  // The wallet adapter's connection changes when the endpoint changes
+  const connectionEndpoint = connection.rpcEndpoint;
+
   useEffect(() => {
     let instance: FormoAnalytics | null = null;
     let mounted = true;
@@ -51,9 +60,10 @@ export function FormoProvider({ children }: { children: ReactNode }) {
       }
 
       try {
+        // Use the ref to get current wallet state without causing re-renders
         instance = await FormoAnalytics.init(writeKey, {
           solana: {
-            wallet,
+            wallet: walletRef.current,
             connection,
             cluster: networkConfiguration,
           },
@@ -65,7 +75,7 @@ export function FormoProvider({ children }: { children: ReactNode }) {
           setError(null);
           console.log("[Formo] Initialized with Solana support", {
             cluster: networkConfiguration,
-            walletConnected: wallet.connected,
+            endpoint: connectionEndpoint,
           });
         } else {
           instance.cleanup();
@@ -87,7 +97,7 @@ export function FormoProvider({ children }: { children: ReactNode }) {
         instance.cleanup();
       }
     };
-  }, [wallet, connection, networkConfiguration]);
+  }, [connection, connectionEndpoint, networkConfiguration]);
 
   // Log wallet events
   useEffect(() => {
