@@ -1,0 +1,49 @@
+"use client";
+
+import { ReactNode, useMemo } from "react";
+import {
+  ConnectionProvider,
+  WalletProvider,
+} from "@solana/wallet-adapter-react";
+import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
+import {
+  PhantomWalletAdapter,
+  SolflareWalletAdapter,
+  TorusWalletAdapter,
+  LedgerWalletAdapter,
+  CoinbaseWalletAdapter,
+} from "@solana/wallet-adapter-wallets";
+import { clusterApiUrl } from "@solana/web3.js";
+import { useNetworkConfiguration } from "./NetworkConfigurationProvider";
+import { useAutoConnect } from "./AutoConnectProvider";
+
+import "@solana/wallet-adapter-react-ui/styles.css";
+
+export function WalletContextProvider({ children }: { children: ReactNode }) {
+  const { networkConfiguration } = useNetworkConfiguration();
+  const { autoConnect } = useAutoConnect();
+
+  const endpoint = useMemo(() => {
+    const customRpc = process.env.NEXT_PUBLIC_SOLANA_RPC_URL;
+    return customRpc || clusterApiUrl(networkConfiguration);
+  }, [networkConfiguration]);
+
+  const wallets = useMemo(
+    () => [
+      new PhantomWalletAdapter(),
+      new SolflareWalletAdapter(),
+      new TorusWalletAdapter(),
+      new LedgerWalletAdapter(),
+      new CoinbaseWalletAdapter(),
+    ],
+    []
+  );
+
+  return (
+    <ConnectionProvider endpoint={endpoint}>
+      <WalletProvider wallets={wallets} autoConnect={autoConnect}>
+        <WalletModalProvider>{children}</WalletModalProvider>
+      </WalletProvider>
+    </ConnectionProvider>
+  );
+}

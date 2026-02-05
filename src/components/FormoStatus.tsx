@@ -1,39 +1,33 @@
 "use client";
 
-import { FC } from "react";
-import { useFormo } from "@/providers/FormoProvider";
+import { useFormo } from "@/contexts/FormoProvider";
+import { Activity, AlertCircle, CheckCircle } from "lucide-react";
 
-export const FormoStatus: FC = () => {
+export function FormoStatus() {
   const { isInitialized, error } = useFormo();
 
-  return (
-    <div className="flex items-center justify-center">
-      <div
-        className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm ${
-          error
-            ? "bg-red-900/30 text-red-400 border border-red-700"
-            : isInitialized
-            ? "bg-green-900/30 text-green-400 border border-green-700"
-            : "bg-yellow-900/30 text-yellow-400 border border-yellow-700"
-        }`}
-      >
-        <span
-          className={`w-2 h-2 rounded-full ${
-            error
-              ? "bg-red-500"
-              : isInitialized
-              ? "bg-green-500 animate-pulse"
-              : "bg-yellow-500 animate-pulse"
-          }`}
-        />
-        <span>
-          {error
-            ? `Formo Error: ${error}`
-            : isInitialized
-            ? "Formo SDK Connected"
-            : "Initializing Formo..."}
-        </span>
+  if (error) {
+    return (
+      <div className="flex items-center gap-1.5 text-xs text-yellow-600 dark:text-yellow-400">
+        <AlertCircle className="h-3.5 w-3.5" />
+        <span className="hidden sm:inline">Formo: {error}</span>
       </div>
+    );
+  }
+
+  if (!isInitialized) {
+    return (
+      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+        <Activity className="h-3.5 w-3.5 animate-pulse" />
+        <span className="hidden sm:inline">Initializing...</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-1.5 text-xs text-green-600 dark:text-green-400">
+      <CheckCircle className="h-3.5 w-3.5" />
+      <span className="hidden sm:inline">Formo Active</span>
     </div>
   );
-};
+}

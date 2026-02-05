@@ -1,16 +1,22 @@
-# Formo Solana Example
+# Formo Solana dApp Scaffold
 
-An example Solana dApp demonstrating the [Formo Analytics SDK](https://github.com/getformo/sdk) integration with Solana wallet adapter.
+A modern Solana dApp scaffold demonstrating the [Formo Analytics SDK](https://github.com/getformo/sdk) integration with Solana wallet adapter. Based on [builderz-solana-dapp-scaffold](https://github.com/builderz-labs/builderz-solana-dapp-scaffold) with comprehensive transaction examples from [solana-labs/dapp-scaffold](https://github.com/solana-labs/dapp-scaffold).
 
 This app tests the Solana support added in [PR #157](https://github.com/getformo/sdk/pull/157).
 
 ## Features
 
-- **Wallet Connection**: Connect/disconnect with Phantom, Solflare, Torus, or Ledger
-- **Message Signing**: Sign arbitrary messages with your wallet
-- **Transaction Sending**: Send SOL transfers with transaction lifecycle tracking
-- **Event Logging**: Real-time visualization of Formo analytics events
-- **Devnet Airdrop**: Request test SOL for experimentation
+- **Modern UI**: Built with Next.js 14, Tailwind CSS, and shadcn/ui components
+- **Multi-Wallet Support**: Phantom, Solflare, Torus, Ledger, Coinbase
+- **Network Switching**: Easy switching between Devnet, Testnet, and Mainnet
+- **Theme Support**: Dark/light mode with system detection
+- **Comprehensive Demos**:
+  - Request Airdrop (devnet)
+  - Send Legacy Transaction
+  - Send Versioned Transaction (V0)
+  - Sign Message
+  - Sign Transaction (without broadcast)
+  - Sign All Transactions (batch)
 
 ## Formo SDK Events Tracked
 
@@ -49,11 +55,8 @@ npm install
 # Set up environment variables
 cp .env.example .env
 # Edit .env and add your Formo write key
-```
 
-### Running the App
-
-```bash
+# Run the development server
 npm run dev
 ```
 
@@ -100,56 +103,88 @@ Use this checklist to verify Formo SDK Solana integration:
 - [ ] Connect wallet → verify `wallet_connect` event fires
 - [ ] Disconnect wallet → verify `wallet_disconnect` event fires
 - [ ] Switch wallets → verify connect/disconnect events fire correctly
+- [ ] Auto-connect on page reload → verify event tracking
 
 ### Signature Events
-- [ ] Sign a message → verify `signature_requested` event fires
-- [ ] Approve signature → verify `signature_confirmed` event fires
-- [ ] Reject signature → verify `signature_rejected` event fires
+- [ ] Sign a message → verify `signature_requested` → `signature_confirmed`
+- [ ] Reject message signing → verify `signature_requested` → `signature_rejected`
+- [ ] Sign transaction (no send) → verify signature events
+- [ ] Sign all transactions (batch) → verify events for each
 
 ### Transaction Events
-- [ ] Initiate transaction → verify `transaction_started` event fires
-- [ ] Transaction broadcast → verify `transaction_broadcasted` event fires
-- [ ] Transaction confirmed → verify `transaction_confirmed` event fires
-- [ ] Send to invalid address → verify error handling
+- [ ] Send legacy transaction → verify full lifecycle
+- [ ] Send versioned (V0) transaction → verify full lifecycle
+- [ ] Cancel transaction → verify proper event handling
+- [ ] Transaction fails → verify `transaction_reverted` event
 
 ### Edge Cases
 - [ ] Rapid connect/disconnect cycles
 - [ ] Multiple signatures in sequence
-- [ ] Transaction timeout handling
-- [ ] Network switching (devnet ↔ testnet)
+- [ ] Network switching mid-session
+- [ ] Batch transaction signing
 
 ## Project Structure
 
 ```
 src/
 ├── app/
-│   ├── layout.tsx      # Root layout with providers
-│   ├── page.tsx        # Main demo page
-│   └── globals.css     # Global styles
+│   ├── layout.tsx          # Root layout with providers
+│   ├── page.tsx            # Main demo page with tabs
+│   ├── providers.tsx       # Provider hierarchy
+│   └── globals.css         # Global styles + shadcn theme
 ├── components/
-│   ├── WalletConnect.tsx    # Wallet connection UI
-│   ├── SignMessageDemo.tsx  # Message signing demo
-│   ├── TransactionDemo.tsx  # SOL transfer demo
-│   ├── EventLog.tsx         # Real-time event viewer
-│   └── FormoStatus.tsx      # SDK connection status
-└── providers/
-    ├── SolanaProviders.tsx  # Solana wallet adapter setup
-    └── FormoProvider.tsx    # Formo SDK initialization
+│   ├── ui/                 # shadcn/ui components
+│   │   ├── button.tsx
+│   │   ├── card.tsx
+│   │   ├── switch.tsx
+│   │   └── tabs.tsx
+│   ├── layout/             # Layout components
+│   │   ├── Header.tsx
+│   │   ├── Footer.tsx
+│   │   └── ThemeToggle.tsx
+│   ├── wallet/             # Wallet components
+│   │   ├── WalletButton.tsx
+│   │   ├── NetworkSwitcher.tsx
+│   │   └── AutoConnect.tsx
+│   ├── demos/              # Demo components
+│   │   ├── RequestAirdrop.tsx
+│   │   ├── SendTransaction.tsx
+│   │   ├── SendVersionedTransaction.tsx
+│   │   ├── SignMessage.tsx
+│   │   ├── SignTransaction.tsx
+│   │   └── SignAllTransactions.tsx
+│   ├── FormoStatus.tsx     # SDK connection indicator
+│   └── WalletInfo.tsx      # Wallet info display
+├── contexts/
+│   ├── NetworkConfigurationProvider.tsx
+│   ├── AutoConnectProvider.tsx
+│   ├── WalletContextProvider.tsx
+│   └── FormoProvider.tsx
+├── stores/
+│   ├── useNotificationStore.ts
+│   └── useUserSOLBalanceStore.ts
+└── lib/
+    └── utils.ts            # Utility functions
 ```
 
 ## Tech Stack
 
 - **Framework**: Next.js 14 (App Router)
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Blockchain**: Solana (devnet by default)
+- **Styling**: Tailwind CSS + shadcn/ui
+- **State Management**: Zustand
+- **Blockchain**: Solana Web3.js 1.98
 - **Wallet Adapter**: @solana/wallet-adapter-react
-- **Analytics**: @formo/analytics
+- **Analytics**: @formo/analytics (Solana branch)
+- **Theme**: next-themes
+- **Notifications**: Sonner
 
 ## Related Links
 
 - [Formo SDK Repository](https://github.com/getformo/sdk)
 - [Solana Support PR #157](https://github.com/getformo/sdk/pull/157)
+- [builderz-solana-dapp-scaffold](https://github.com/builderz-labs/builderz-solana-dapp-scaffold)
+- [solana-labs/dapp-scaffold](https://github.com/solana-labs/dapp-scaffold)
 - [Solana Wallet Adapter Docs](https://github.com/solana-labs/wallet-adapter)
 - [Solana Web3.js Docs](https://solana-labs.github.io/solana-web3.js/)
 

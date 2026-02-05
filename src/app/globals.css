@@ -2,36 +2,79 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 14, 14, 16;
-  --background-end-rgb: 24, 24, 27;
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 158 64% 52%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 262 83% 58%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 158 64% 52%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 262 83% 58%;
+  }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-  min-height: 100vh;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
-/* Solana wallet adapter UI overrides */
+/* Solana Wallet Adapter UI overrides */
 .wallet-adapter-button {
-  background: linear-gradient(135deg, #9945FF 0%, #14F195 100%) !important;
+  @apply bg-gradient-to-r from-solana-purple to-solana-green !important;
 }
 
 .wallet-adapter-button:hover {
-  background: linear-gradient(135deg, #8833EE 0%, #12E088 100%) !important;
+  @apply opacity-90 !important;
 }
 
 .wallet-adapter-modal-wrapper {
-  background-color: rgba(14, 14, 16, 0.95) !important;
+  @apply bg-background/95 !important;
 }
 
 .wallet-adapter-modal-container {
-  background-color: #1a1a1e !important;
+  @apply bg-card border border-border !important;
+}
+
+.wallet-adapter-modal-title {
+  @apply text-foreground !important;
+}
+
+.wallet-adapter-modal-list li {
+  @apply hover:bg-muted !important;
 }
