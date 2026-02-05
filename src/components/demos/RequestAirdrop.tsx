@@ -5,6 +5,7 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useNetworkConfiguration } from "@/contexts/NetworkConfigurationProvider";
 import { useUserSOLBalanceStore } from "@/stores/useUserSOLBalanceStore";
 import { toast } from "sonner";
 import { Loader2, Coins } from "lucide-react";
@@ -12,6 +13,7 @@ import { Loader2, Coins } from "lucide-react";
 export const RequestAirdrop: FC = () => {
   const { connection } = useConnection();
   const { publicKey } = useWallet();
+  const { networkConfiguration } = useNetworkConfiguration();
   const { getUserSOLBalance } = useUserSOLBalanceStore();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,7 +43,7 @@ export const RequestAirdrop: FC = () => {
         action: {
           label: "View",
           onClick: () => window.open(
-            `https://explorer.solana.com/tx/${signature}?cluster=devnet`,
+            `https://explorer.solana.com/tx/${signature}?cluster=${networkConfiguration}`,
             "_blank"
           ),
         },
@@ -54,7 +56,7 @@ export const RequestAirdrop: FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [publicKey, connection, getUserSOLBalance]);
+  }, [publicKey, connection, getUserSOLBalance, networkConfiguration]);
 
   return (
     <Card>

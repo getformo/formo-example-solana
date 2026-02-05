@@ -11,12 +11,14 @@ import {
 } from "@solana/web3.js";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useNetworkConfiguration } from "@/contexts/NetworkConfigurationProvider";
 import { toast } from "sonner";
 import { Loader2, Zap } from "lucide-react";
 
 export const SendVersionedTransaction: FC = () => {
   const { connection } = useConnection();
   const { publicKey, sendTransaction } = useWallet();
+  const { networkConfiguration } = useNetworkConfiguration();
   const [isLoading, setIsLoading] = useState(false);
 
   const onClick = useCallback(async () => {
@@ -60,7 +62,7 @@ export const SendVersionedTransaction: FC = () => {
         action: {
           label: "View",
           onClick: () => window.open(
-            `https://explorer.solana.com/tx/${signature}?cluster=devnet`,
+            `https://explorer.solana.com/tx/${signature}?cluster=${networkConfiguration}`,
             "_blank"
           ),
         },
@@ -73,7 +75,7 @@ export const SendVersionedTransaction: FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [publicKey, connection, sendTransaction]);
+  }, [publicKey, connection, sendTransaction, networkConfiguration]);
 
   return (
     <Card>
