@@ -67,6 +67,8 @@ export function FormoProvider({ children }: { children: ReactNode }) {
             cluster: networkConfiguration,
             walletConnected: wallet.connected,
           });
+        } else {
+          instance.cleanup();
         }
       } catch (err) {
         if (mounted) {
