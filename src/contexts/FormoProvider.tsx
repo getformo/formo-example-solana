@@ -108,14 +108,6 @@ export function FormoProvider({ children }: { children: ReactNode }) {
     formo.setSolanaWallet(wallet);
   }, [formo, wallet]);
 
-  // Update SDK when connection changes (network switch)
-  useEffect(() => {
-    if (!formo) return;
-
-    formo.setSolanaConnection(connection);
-    formo.setSolanaCluster(networkConfiguration);
-  }, [formo, connection, networkConfiguration]);
-
   // Show toast notifications for wallet events
   useEffect(() => {
     if (!isInitialized) return;

@@ -11,7 +11,7 @@ import { Loader2, Layers } from "lucide-react";
 
 export const SignAllTransactions: FC = () => {
   const { connection } = useConnection();
-  const { publicKey, signAllTransactions, sendTransaction } = useWallet();
+  const { publicKey, signAllTransactions } = useWallet();
   const { networkConfiguration } = useNetworkConfiguration();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -97,7 +97,7 @@ export const SignAllTransactions: FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [publicKey, connection, signAllTransactions, sendTransaction, networkConfiguration]);
+  }, [publicKey, connection, signAllTransactions, networkConfiguration]);
 
   return (
     <Card>
