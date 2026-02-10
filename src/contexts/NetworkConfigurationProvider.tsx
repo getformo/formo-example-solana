@@ -20,7 +20,7 @@ export function useNetworkConfiguration() {
 
 const VALID_NETWORKS: Network[] = ["devnet", "mainnet-beta"];
 
-function isValidNetwork(value: string | undefined): value is Network {
+export function isValidNetwork(value: string | undefined): value is Network {
   return VALID_NETWORKS.includes(value as Network);
 }
 

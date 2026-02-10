@@ -14,7 +14,7 @@ import {
   CoinbaseWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
 import { clusterApiUrl } from "@solana/web3.js";
-import { useNetworkConfiguration } from "./NetworkConfigurationProvider";
+import { useNetworkConfiguration, isValidNetwork } from "./NetworkConfigurationProvider";
 
 import "@solana/wallet-adapter-react-ui/styles.css";
 
@@ -23,7 +23,8 @@ export function WalletContextProvider({ children }: { children: ReactNode }) {
 
   const endpoint = useMemo(() => {
     const customRpc = process.env.NEXT_PUBLIC_SOLANA_RPC_URL;
-    const defaultCluster = (["devnet", "mainnet-beta"].includes(process.env.NEXT_PUBLIC_SOLANA_CLUSTER || "") ? process.env.NEXT_PUBLIC_SOLANA_CLUSTER : "devnet") as typeof networkConfiguration;
+    const envCluster = process.env.NEXT_PUBLIC_SOLANA_CLUSTER;
+    const defaultCluster = isValidNetwork(envCluster) ? envCluster : "devnet";
 
     // Only use custom RPC if network matches the default cluster configuration
     // This allows network switching to work correctly
