@@ -47,15 +47,6 @@ export default function Home() {
               <SendTransaction />
               <SendVersionedTransaction />
             </div>
-            <div className="rounded-lg border bg-muted/50 p-4">
-              <h3 className="text-sm font-medium mb-2">Transaction Events Tracked</h3>
-              <ul className="text-sm text-muted-foreground space-y-1">
-                <li>• <code className="text-xs">transaction_started</code> - When you initiate a transaction</li>
-                <li>• <code className="text-xs">transaction_broadcasted</code> - When transaction is sent to network</li>
-                <li>• <code className="text-xs">transaction_confirmed</code> - When transaction is confirmed on-chain</li>
-                <li>• <code className="text-xs">transaction_reverted</code> - If transaction fails on-chain</li>
-              </ul>
-            </div>
           </TabsContent>
 
           <TabsContent value="signing" className="space-y-4">
@@ -64,14 +55,6 @@ export default function Home() {
               <SignTransaction />
             </div>
             <SignAllTransactions />
-            <div className="rounded-lg border bg-muted/50 p-4">
-              <h3 className="text-sm font-medium mb-2">Signature Events Tracked</h3>
-              <ul className="text-sm text-muted-foreground space-y-1">
-                <li>• <code className="text-xs">signature_requested</code> - When signing is initiated</li>
-                <li>• <code className="text-xs">signature_confirmed</code> - When user approves the signature</li>
-                <li>• <code className="text-xs">signature_rejected</code> - When user rejects the signature</li>
-              </ul>
-            </div>
           </TabsContent>
 
           <TabsContent value="faucet" className="space-y-4">
@@ -103,43 +86,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* SDK Info */}
-      <div className="rounded-lg border bg-card p-6 space-y-4">
-        <h2 className="text-lg font-semibold">Formo SDK Integration</h2>
-        <p className="text-sm text-muted-foreground">
-          This app tests the Solana wallet adapter support added in{" "}
-          <a
-            href="https://github.com/getformo/sdk/pull/157"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-medium underline underline-offset-4 hover:text-primary"
-          >
-            PR #157
-          </a>.
-          The SDK automatically tracks wallet events, signatures, and transaction lifecycle.
-        </p>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="rounded-lg border p-4">
-            <h3 className="text-sm font-medium mb-2">Wallet Events</h3>
-            <ul className="text-xs text-muted-foreground space-y-1">
-              <li>• wallet_connect</li>
-              <li>• wallet_disconnect</li>
-            </ul>
-          </div>
-          <div className="rounded-lg border p-4">
-            <h3 className="text-sm font-medium mb-2">Initialization</h3>
-            <pre className="text-xs bg-muted p-2 rounded overflow-x-auto">
-{`FormoAnalytics.init(key, {
-  solana: {
-    wallet,
-    connection,
-    cluster: "devnet"
-  }
-})`}
-            </pre>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

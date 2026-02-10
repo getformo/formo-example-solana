@@ -41,10 +41,7 @@ export function FormoProvider({ children }: { children: ReactNode }) {
   const walletRef = useRef(wallet);
   walletRef.current = wallet;
 
-  // Only re-initialize when connection or network actually changes
-  // The wallet adapter's connection changes when the endpoint changes
-  const connectionEndpoint = connection.rpcEndpoint;
-
+  // Initialize the SDK once
   useEffect(() => {
     let instance: FormoAnalytics | null = null;
     let mounted = true;
@@ -60,7 +57,6 @@ export function FormoProvider({ children }: { children: ReactNode }) {
       }
 
       try {
-        // Use the ref to get current wallet state without causing re-renders
         instance = await FormoAnalytics.init(writeKey, {
           tracking: true,
           logger: {
@@ -80,7 +76,7 @@ export function FormoProvider({ children }: { children: ReactNode }) {
           setError(null);
           console.log("[Formo] Initialized with Solana support", {
             cluster: networkConfiguration,
-            endpoint: connectionEndpoint,
+            endpoint: connection.rpcEndpoint,
           });
         } else {
           instance.cleanup();
@@ -102,14 +98,25 @@ export function FormoProvider({ children }: { children: ReactNode }) {
         instance.cleanup();
       }
     };
-  }, [connection, connectionEndpoint, networkConfiguration]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Initialize once — network/connection updates handled below
 
-  // Update SDK when wallet state changes (connect/disconnect)
-  // This is critical for the SDK to emit connect/disconnect events
+  // When network changes, update the SDK instead of re-creating it
   useEffect(() => {
     if (!formo) return;
 
-    // Update the SDK's wallet reference so it can track connect/disconnect
+    formo.setSolanaCluster(networkConfiguration);
+    formo.setSolanaConnection(connection);
+    console.log("[Formo] Network updated", {
+      cluster: networkConfiguration,
+      endpoint: connection.rpcEndpoint,
+    });
+  }, [formo, networkConfiguration, connection]);
+
+  // Update SDK when wallet state changes (connect/disconnect)
+  useEffect(() => {
+    if (!formo) return;
+
     formo.setSolanaWallet(wallet);
   }, [formo, wallet]);
 
