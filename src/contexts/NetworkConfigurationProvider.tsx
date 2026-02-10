@@ -18,9 +18,9 @@ export function useNetworkConfiguration() {
   return useContext(NetworkConfigurationContext);
 }
 
-const VALID_NETWORKS: Network[] = ["devnet", "mainnet-beta"];
+export const VALID_NETWORKS: Network[] = ["devnet", "mainnet-beta"];
 
-function isValidNetwork(value: string | undefined): value is Network {
+export function isValidNetwork(value: string | undefined): value is Network {
   return VALID_NETWORKS.includes(value as Network);
 }
 
