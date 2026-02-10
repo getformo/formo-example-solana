@@ -7,7 +7,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { toast } from "sonner";
 import { Loader2, PenTool, CheckCircle } from "lucide-react";
 import bs58 from "bs58";
-import { verify } from "@noble/ed25519";
+import { etc, verify } from "@noble/ed25519";
+import { sha512 } from "@noble/hashes/sha512";
+
+// @noble/ed25519 v2.x requires SHA-512 to be configured by the consumer
+etc.sha512Sync = (...m) => sha512(etc.concatBytes(...m));
 
 export const SignMessage: FC = () => {
   const { publicKey, signMessage } = useWallet();

@@ -15,13 +15,11 @@ import {
 } from "@solana/wallet-adapter-wallets";
 import { clusterApiUrl } from "@solana/web3.js";
 import { useNetworkConfiguration } from "./NetworkConfigurationProvider";
-import { useAutoConnect } from "./AutoConnectProvider";
 
 import "@solana/wallet-adapter-react-ui/styles.css";
 
 export function WalletContextProvider({ children }: { children: ReactNode }) {
   const { networkConfiguration } = useNetworkConfiguration();
-  const { autoConnect } = useAutoConnect();
 
   const endpoint = useMemo(() => {
     const customRpc = process.env.NEXT_PUBLIC_SOLANA_RPC_URL;
@@ -48,7 +46,7 @@ export function WalletContextProvider({ children }: { children: ReactNode }) {
 
   return (
     <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets} autoConnect={autoConnect}>
+      <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>{children}</WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>

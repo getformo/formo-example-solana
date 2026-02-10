@@ -64,7 +64,7 @@ export function FormoProvider({ children }: { children: ReactNode }) {
             levels: ["debug", "info", "warn", "error"],
           },
           solana: {
-            wallet: walletRef.current,
+            wallet: walletRef.current as any,
             connection,
             cluster: networkConfiguration,
           },
@@ -117,7 +117,7 @@ export function FormoProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!formo) return;
 
-    formo.setSolanaWallet(wallet);
+    formo.setSolanaWallet(wallet as any);
   }, [formo, wallet]);
 
   // Show toast notifications for wallet events

@@ -39,6 +39,9 @@ export const SendTransaction: FC = () => {
         value: { blockhash, lastValidBlockHeight },
       } = await connection.getLatestBlockhashAndContext();
 
+      transaction.recentBlockhash = blockhash;
+      transaction.feePayer = publicKey;
+
       signature = await sendTransaction(transaction, connection, {
         minContextSlot,
       });
