@@ -18,9 +18,16 @@ export function useNetworkConfiguration() {
   return useContext(NetworkConfigurationContext);
 }
 
+const VALID_NETWORKS: Network[] = ["devnet", "mainnet-beta"];
+
+function isValidNetwork(value: string | undefined): value is Network {
+  return VALID_NETWORKS.includes(value as Network);
+}
+
 export function NetworkConfigurationProvider({ children }: { children: ReactNode }) {
+  const envCluster = process.env.NEXT_PUBLIC_SOLANA_CLUSTER;
   const [networkConfiguration, setNetworkConfiguration] = useState<Network>(
-    (process.env.NEXT_PUBLIC_SOLANA_CLUSTER as Network) || "devnet"
+    isValidNetwork(envCluster) ? envCluster : "devnet"
   );
 
   return (

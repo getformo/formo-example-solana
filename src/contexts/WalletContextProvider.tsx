@@ -23,7 +23,7 @@ export function WalletContextProvider({ children }: { children: ReactNode }) {
 
   const endpoint = useMemo(() => {
     const customRpc = process.env.NEXT_PUBLIC_SOLANA_RPC_URL;
-    const defaultCluster = (process.env.NEXT_PUBLIC_SOLANA_CLUSTER || "devnet") as typeof networkConfiguration;
+    const defaultCluster = (["devnet", "mainnet-beta"].includes(process.env.NEXT_PUBLIC_SOLANA_CLUSTER || "") ? process.env.NEXT_PUBLIC_SOLANA_CLUSTER : "devnet") as typeof networkConfiguration;
 
     // Only use custom RPC if network matches the default cluster configuration
     // This allows network switching to work correctly
