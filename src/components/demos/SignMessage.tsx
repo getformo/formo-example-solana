@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { toast } from "sonner";
 import { Loader2, PenTool, CheckCircle } from "lucide-react";
 import bs58 from "bs58";
-import { ed25519 } from "@noble/ed25519";
+import { verify } from "@noble/ed25519";
 
 export const SignMessage: FC = () => {
   const { publicKey, signMessage } = useWallet();
@@ -36,7 +36,7 @@ export const SignMessage: FC = () => {
       const signature = await signMessage(message);
 
       // Verify the signature
-      const isValid = await ed25519.verify(signature, message, publicKey.toBytes());
+      const isValid = await verify(signature, message, publicKey.toBytes());
 
       if (!isValid) {
         throw new Error("Signature verification failed!");

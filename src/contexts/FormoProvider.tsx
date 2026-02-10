@@ -62,6 +62,11 @@ export function FormoProvider({ children }: { children: ReactNode }) {
       try {
         // Use the ref to get current wallet state without causing re-renders
         instance = await FormoAnalytics.init(writeKey, {
+          tracking: true,
+          logger: {
+            enabled: true,
+            levels: ["debug", "info", "warn", "error"],
+          },
           solana: {
             wallet: walletRef.current,
             connection,

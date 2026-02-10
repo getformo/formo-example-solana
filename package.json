@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@formo/analytics": "github:getformo/sdk#claude/add-solana-support-LMxRK",
+    "@formo/analytics": "file:../sdk",
     "@noble/ed25519": "^2.2.3",
     "@radix-ui/react-slot": "^1.1.1",
     "@radix-ui/react-switch": "^1.1.2",
