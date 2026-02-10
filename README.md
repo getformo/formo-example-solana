@@ -8,7 +8,7 @@ This app tests the Solana support added in [PR #157](https://github.com/getformo
 
 - **Modern UI**: Built with Next.js 14, Tailwind CSS, and shadcn/ui components
 - **Multi-Wallet Support**: Phantom, Solflare, Torus, Ledger, Coinbase
-- **Network Switching**: Easy switching between Devnet, Testnet, and Mainnet
+- **Network Switching**: Easy switching between Devnet and Mainnet
 - **Theme Support**: Dark/light mode with system detection
 - **Comprehensive Demos**:
   - Request Airdrop (devnet)
@@ -73,7 +73,7 @@ NEXT_PUBLIC_FORMO_WRITE_KEY=your_write_key_here
 # Optional: Custom Solana RPC endpoint (defaults to public devnet)
 # NEXT_PUBLIC_SOLANA_RPC_URL=https://api.devnet.solana.com
 
-# Optional: Solana cluster (devnet, testnet, mainnet-beta)
+# Optional: Solana cluster (devnet, mainnet-beta)
 NEXT_PUBLIC_SOLANA_CLUSTER=devnet
 ```
 

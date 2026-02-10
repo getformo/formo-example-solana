@@ -12,7 +12,6 @@ export function NetworkSwitcher() {
       className="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
     >
       <option value="devnet">Devnet</option>
-      <option value="testnet">Testnet</option>
       <option value="mainnet-beta">Mainnet</option>
     </select>
   );
