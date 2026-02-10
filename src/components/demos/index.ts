@@ -1,4 +1,3 @@
-export { RequestAirdrop } from "./RequestAirdrop";
 export { SendTransaction } from "./SendTransaction";
 export { SendVersionedTransaction } from "./SendVersionedTransaction";
 export { SignMessage } from "./SignMessage";

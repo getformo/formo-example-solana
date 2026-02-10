@@ -2,7 +2,6 @@
 
 import { WalletInfo } from "@/components/WalletInfo";
 import {
-  RequestAirdrop,
   SendTransaction,
   SendVersionedTransaction,
   SignMessage,
@@ -36,10 +35,9 @@ export default function Home() {
       {/* Demo Sections */}
       {connected && (
         <Tabs defaultValue="transactions" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="transactions">Transactions</TabsTrigger>
             <TabsTrigger value="signing">Signing</TabsTrigger>
-            <TabsTrigger value="faucet">Faucet</TabsTrigger>
           </TabsList>
 
           <TabsContent value="transactions" className="space-y-4">
@@ -55,19 +53,6 @@ export default function Home() {
               <SignTransaction />
             </div>
             <SignAllTransactions />
-          </TabsContent>
-
-          <TabsContent value="faucet" className="space-y-4">
-            <div className="max-w-md mx-auto">
-              <RequestAirdrop />
-            </div>
-            <div className="rounded-lg border bg-muted/50 p-4">
-              <h3 className="text-sm font-medium mb-2">Note</h3>
-              <p className="text-sm text-muted-foreground">
-                Airdrops only work on devnet. Make sure you have the network set to "Devnet" in the header.
-                You may need to wait between airdrop requests due to rate limiting.
-              </p>
-            </div>
           </TabsContent>
         </Tabs>
       )}
