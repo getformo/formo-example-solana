@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, ReactNode } from "react";
 
-export type Network = "devnet" | "testnet" | "mainnet-beta";
+export type Network = "devnet" | "mainnet-beta";
 
 interface NetworkConfigurationContextState {
   networkConfiguration: Network;
