@@ -71,6 +71,10 @@ export const CustomEvents: FC = () => {
       toast.error("Invalid JSON in properties");
       return;
     }
+    if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+      toast.error("Properties must be a JSON object");
+      return;
+    }
     await sendEvent(customName.trim(), parsed);
   };
 
