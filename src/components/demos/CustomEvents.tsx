@@ -26,10 +26,13 @@ const PRESET_EVENTS = [
 
 export const CustomEvents: FC = () => {
   const { formo, isInitialized } = useFormo();
-  const [loadingEvents, setLoadingEvents] = useState<Set<string>>(new Set());
+  // Count in-flight requests per event name so duplicate sends keep loading state correct
+  const [loadingCounts, setLoadingCounts] = useState<Map<string, number>>(new Map());
   const [customName, setCustomName] = useState("");
   const [customProps, setCustomProps] = useState('{ "key": "value" }');
   const [sentEvents, setSentEvents] = useState<string[]>([]);
+
+  const isLoading = (name: string) => (loadingCounts.get(name) ?? 0) > 0;
 
   const sendEvent = async (name: string, properties: Record<string, unknown>) => {
     if (!formo || !isInitialized) {
@@ -37,7 +40,11 @@ export const CustomEvents: FC = () => {
       return;
     }
 
-    setLoadingEvents((prev) => new Set(prev).add(name));
+    setLoadingCounts((prev) => {
+      const next = new Map(prev);
+      next.set(name, (next.get(name) ?? 0) + 1);
+      return next;
+    });
     try {
       await formo.track(name, properties);
       setSentEvents((prev) => [
@@ -51,9 +58,11 @@ export const CustomEvents: FC = () => {
       const msg = error instanceof Error ? error.message : "Unknown error";
       toast.error("Event Failed", { description: msg });
     } finally {
-      setLoadingEvents((prev) => {
-        const next = new Set(prev);
-        next.delete(name);
+      setLoadingCounts((prev) => {
+        const next = new Map(prev);
+        const count = (next.get(name) ?? 0) - 1;
+        if (count <= 0) next.delete(name);
+        else next.set(name, count);
         return next;
       });
     }
@@ -99,10 +108,10 @@ export const CustomEvents: FC = () => {
                 variant="outline"
                 size="sm"
                 className="justify-start font-mono text-xs"
-                disabled={loadingEvents.has(evt.name) || !isInitialized}
+                disabled={isLoading(evt.name) || !isInitialized}
                 onClick={() => sendEvent(evt.name, evt.properties)}
               >
-                {loadingEvents.has(evt.name) ? (
+                {isLoading(evt.name) ? (
                   <Loader2 className="mr-2 h-3 w-3 animate-spin" />
                 ) : (
                   <Activity className="mr-2 h-3 w-3" />
@@ -152,10 +161,10 @@ export const CustomEvents: FC = () => {
           <Button
             variant="gradient"
             onClick={sendCustom}
-            disabled={!isInitialized || loadingEvents.has(customName.trim())}
+            disabled={!isInitialized || isLoading(customName.trim())}
             className="w-full"
           >
-            {loadingEvents.has(customName.trim()) ? (
+            {isLoading(customName.trim()) ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Sending...
