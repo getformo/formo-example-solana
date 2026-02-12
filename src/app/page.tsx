@@ -7,6 +7,7 @@ import {
   SignMessage,
   SignTransaction,
   SignAllTransactions,
+  CustomEvents,
 } from "@/components/demos";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -35,9 +36,10 @@ export default function Home() {
       {/* Demo Sections */}
       {connected && (
         <Tabs defaultValue="transactions" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="transactions">Transactions</TabsTrigger>
             <TabsTrigger value="signing">Signing</TabsTrigger>
+            <TabsTrigger value="events">Custom Events</TabsTrigger>
           </TabsList>
 
           <TabsContent value="transactions" className="space-y-4">
@@ -53,6 +55,10 @@ export default function Home() {
               <SignTransaction />
             </div>
             <SignAllTransactions />
+          </TabsContent>
+
+          <TabsContent value="events" className="space-y-4">
+            <CustomEvents />
           </TabsContent>
         </Tabs>
       )}

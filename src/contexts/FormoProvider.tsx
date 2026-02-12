@@ -113,12 +113,14 @@ export function FormoProvider({ children }: { children: ReactNode }) {
     });
   }, [formo, networkConfiguration, connection]);
 
-  // Update SDK when wallet state changes (connect/disconnect)
+  // Update SDK when wallet adapter changes (wallet selection/connect/disconnect)
+  // Use wallet.wallet (the inner { adapter, readyState }) rather than the entire
+  // useWallet() return to avoid calling setSolanaWallet on every render.
   useEffect(() => {
     if (!formo) return;
 
     formo.setSolanaWallet(wallet as any);
-  }, [formo, wallet]);
+  }, [formo, wallet.wallet, wallet.connected]);  // eslint-disable-line react-hooks/exhaustive-deps
 
   // Show toast notifications for wallet events
   useEffect(() => {
