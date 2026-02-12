@@ -105,22 +105,22 @@ export function FormoProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!formo) return;
 
-    formo.setSolanaCluster(networkConfiguration);
-    formo.setSolanaConnection(connection);
+    formo.solana.setCluster(networkConfiguration);
+    formo.solana.setConnection(connection);
     console.log("[Formo] Network updated", {
       cluster: networkConfiguration,
       endpoint: connection.rpcEndpoint,
     });
   }, [formo, networkConfiguration, connection]);
 
-  // Update SDK when wallet adapter changes (wallet selection/connect/disconnect)
-  // Use wallet.wallet (the inner { adapter, readyState }) rather than the entire
-  // useWallet() return to avoid calling setSolanaWallet on every render.
+  // Update SDK when wallet state changes (connect/disconnect/switch)
+  // The SDK's setWallet() has a fast-path that skips teardown when the
+  // inner adapter hasn't changed, so passing the full wallet object is safe.
   useEffect(() => {
     if (!formo) return;
 
-    formo.setSolanaWallet(wallet as any);
-  }, [formo, wallet.wallet, wallet.connected]);  // eslint-disable-line react-hooks/exhaustive-deps
+    formo.solana.setWallet(wallet as any);
+  }, [formo, wallet]);
 
   // Show toast notifications for wallet events
   useEffect(() => {
