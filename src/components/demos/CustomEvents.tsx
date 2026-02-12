@@ -26,7 +26,7 @@ const PRESET_EVENTS = [
 
 export const CustomEvents: FC = () => {
   const { formo, isInitialized } = useFormo();
-  const [isLoading, setIsLoading] = useState<string | null>(null);
+  const [loadingEvents, setLoadingEvents] = useState<Set<string>>(new Set());
   const [customName, setCustomName] = useState("");
   const [customProps, setCustomProps] = useState('{ "key": "value" }');
   const [sentEvents, setSentEvents] = useState<string[]>([]);
@@ -37,7 +37,7 @@ export const CustomEvents: FC = () => {
       return;
     }
 
-    setIsLoading(name);
+    setLoadingEvents((prev) => new Set(prev).add(name));
     try {
       await formo.track(name, properties);
       setSentEvents((prev) => [
@@ -51,7 +51,11 @@ export const CustomEvents: FC = () => {
       const msg = error instanceof Error ? error.message : "Unknown error";
       toast.error("Event Failed", { description: msg });
     } finally {
-      setIsLoading(null);
+      setLoadingEvents((prev) => {
+        const next = new Set(prev);
+        next.delete(name);
+        return next;
+      });
     }
   };
 
@@ -91,10 +95,10 @@ export const CustomEvents: FC = () => {
                 variant="outline"
                 size="sm"
                 className="justify-start font-mono text-xs"
-                disabled={isLoading === evt.name || !isInitialized}
+                disabled={loadingEvents.has(evt.name) || !isInitialized}
                 onClick={() => sendEvent(evt.name, evt.properties)}
               >
-                {isLoading === evt.name ? (
+                {loadingEvents.has(evt.name) ? (
                   <Loader2 className="mr-2 h-3 w-3 animate-spin" />
                 ) : (
                   <Activity className="mr-2 h-3 w-3" />
@@ -144,10 +148,10 @@ export const CustomEvents: FC = () => {
           <Button
             variant="gradient"
             onClick={sendCustom}
-            disabled={!isInitialized || isLoading === customName}
+            disabled={!isInitialized || loadingEvents.has(customName.trim())}
             className="w-full"
           >
-            {isLoading === customName ? (
+            {loadingEvents.has(customName.trim()) ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Sending...

@@ -6,7 +6,6 @@ import {
   SendVersionedTransaction,
   SignMessage,
   SignTransaction,
-  SignAllTransactions,
   CustomEvents,
 } from "@/components/demos";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -54,7 +53,6 @@ export default function Home() {
               <SignMessage />
               <SignTransaction />
             </div>
-            <SignAllTransactions />
           </TabsContent>
 
           <TabsContent value="events" className="space-y-4">
